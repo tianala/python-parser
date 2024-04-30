@@ -1,5 +1,3 @@
-import re
-
 class Token:
     def __init__(self, type, value=None):
         self.type = type
@@ -11,23 +9,27 @@ class Tokenizer:
 
     def tokenize_expression(self, expression):
         self.tokens = []
-        tokens = re.findall(r'\(|\)|[+*^~]|[A-Za-z]+', expression)
-        for token in tokens:
-            if token == '(':
+        i = 0
+        while i < len(expression):
+            char = expression[i]
+            if char == '(':
                 self.tokens.append(Token('LEFT_PAREN', '('))
-            elif token == ')':
+            elif char == ')':
                 self.tokens.append(Token('RIGHT_PAREN', ')'))
-            elif token in ['+', '*', '^', '~']:
+            elif char in ['+', '*', '^', '~']:
                 operator_type = ''
-                if token == '+':
+                if char == '+':
                     operator_type = 'AND'
-                elif token == '*':
+                elif char == '*':
                     operator_type = 'OR'
-                elif token == '^':
+                elif char == '^':
                     operator_type = 'XOR'
-                elif token == '~':
+                elif char == '~':
                     operator_type = 'NOT'
-                self.tokens.append(Token(f'{operator_type} OPERATOR', token))
+                self.tokens.append(Token(f'{operator_type} OPERATOR', char))
+            elif char.isalpha() or char in ['0', '1']:
+                self.tokens.append(Token('VARIABLE', char))
             else:
-                self.tokens.append(Token('VARIABLE', token))
+                raise ValueError(f"Invalid character '{char}' at position {i}. Only alphabets (a-z/A-Z) and '0' or '1' are allowed.")
+            i += 1
         return self.tokens
