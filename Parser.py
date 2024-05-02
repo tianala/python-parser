@@ -10,7 +10,7 @@ class BooleanExpressionParser:
 # Example usage:
 if __name__ == "__main__":
     parser = BooleanExpressionParser()
-    expression = "(A AND B) OR (A AND C)"
+    expression = "(A+~B)^(A+C)"
     simplified_expression = parser.simplify_expression(expression)
     print("Original expression:", expression)
     print("Simplified expression:", simplified_expression)
